@@ -30,7 +30,7 @@ function loadVerified(target, kind) {
   const stat = statSync(filepath, {throwIfNoEntry:false});
   if (!stat?.isFile() || stat.size > 2_000_000 || stat.size < 2) throw Error("evidence_unavailable");
   const data = JSON.parse(readFileSync(filepath,"utf8"));
-  if (data?.operation !== (kind === "layout" ? "inspect_binary_layout" : "inspect") ||
+  if (data?.operation !== (kind === "layout" ? "inspect_binary_layout" : "binary_overview") ||
       data?.subject?.digest?.sha256 !== data?.normalized_result?.artifact?.sha256 && kind === "layout") {
     throw Error("evidence_identity_mismatch");
   }

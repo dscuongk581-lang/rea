@@ -1,0 +1,41 @@
+# Install only after validating the account, runtime API key permissions and
+# four-tool curated MCP. Do not auto-enable on a shared VPS without verification.
+[Unit]
+Description=AgentOS REA Research MCP - private OpenAI Tunnel
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/opt/agentos-rea-gpt-mcp-v01/private/control-plane-api-key
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=agentosrea
+Group=agentosrea
+WorkingDirectory=/opt/agentos-rea-gpt-mcp-v01/app
+Environment=HOME=/opt/agentos-rea-gpt-mcp-v01/private
+ExecStart=/opt/agentos-rea-gpt-mcp-v01/bin/tunnel-client run --profile agentos-rea-lab --profile-dir /opt/agentos-rea-gpt-mcp-v01/private/profiles
+Restart=on-failure
+RestartSec=30
+UMask=0077
+NoNewPrivileges=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectKernelLogs=true
+ProtectClock=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryMax=640M
+CPUQuota=100%
+TasksMax=128
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target
